@@ -4,4 +4,5 @@ source 'https://rubygems.org'
 gemspec
 
 
-gem 'philotic', path: '/Users/nathankeyes/Documents/workspace/philotic'
+# gem 'philotic', path: '/Users/nathankeyes/Documents/workspace/philotic'
+gem 'philotic',  github: 'nkeyes/philotic'
