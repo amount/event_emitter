@@ -4,4 +4,5 @@ event_emitter_events:
   bindings:
   - philotic_product: avant
     philotic_component: event_emitter
+    philotic_event_type: event_emitter.event
     x-match: all
