@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+$stdout.sync = true
+
+require 'avant/event_emitter/emitter'
+require 'avant/event_emitter/multiplexer'
+
+Avant::EventEmitter::Emitter.configure do |c|
+  c.stathat_email   = ENV['AVANT_EVENT_EMITTER_STATHAT_ACCOUNT']
+  c.librato_email   = ENV['AVANT_EVENT_EMITTER_LIBRATO_EMAIL']
+  c.librato_api_key = ENV['AVANT_EVENT_EMITTER_LIBRATO_API_KEY']
+  c.prefix          = ENV['AVANT_EVENT_EMITTER_PREFIX']
+
+  if ENV['RAILS_ENV'] == 'production' && ENV['AVANT_EVENT_EMITTER_ENABLED']
+    c.drivers = [:stathat]
+  else
+    c.drivers = :logger
+    # c.drivers = Logger.new("#{Rails.root}/log/events.log")
+  end
+end
+
+Avant::EventEmitter::Multiplexer.subscribe

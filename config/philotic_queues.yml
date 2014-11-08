@@ -1,0 +1,7 @@
+event_emitter_events:
+  options:
+    durable: true
+  bindings:
+  - philotic_product: avant
+    philotic_component: event_emitter
+    x-match: all
