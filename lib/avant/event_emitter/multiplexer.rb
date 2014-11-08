@@ -8,7 +8,7 @@ module Avant
 
       SUBSCRIPTION = 'event_emitter_events'
 
-      def emmiter
+      def emitter
         Avant::EventEmitter::Emitter
       end
 
@@ -18,11 +18,10 @@ module Avant
 
       def subscribe
         Philotic::Subscriber.subscribe(SUBSCRIPTION) do |metadata, message|
-          ap message: message, metadata: metadata
           stat = {
               'stat' => message[:attributes]['stat'],
               'count' => message[:attributes]['count'],
-              't' => metadata[:timestamp],
+              't' => metadata.attributes[:timestamp],
 
           }
 
