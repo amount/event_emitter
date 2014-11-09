@@ -1,6 +1,6 @@
 # Avant::EventEmitter
 
-TODO: Write a gem description
+Publishes stats to Librato and Stathat. And other places too, you know, if you want to build that.
 
 ## Installation
 
