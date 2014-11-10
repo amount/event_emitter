@@ -10,6 +10,7 @@ module Avant
 
       attr_routable :stat
       attr_payload :count
+      attr_payload :value
 
       def initialize(attributes={})
         super
@@ -20,6 +21,7 @@ module Avant
 
         self.stat = attributes['stat']
         self.count = attributes['count']
+        self.value = attributes['value']
       end
 
       def philotic_product=(val)
