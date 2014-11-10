@@ -5,4 +5,4 @@ gemspec
 
 
 # gem 'philotic', path: '/Users/nathankeyes/Documents/workspace/philotic'
-gem 'philotic',  github: 'nkeyes/philotic'
+gem 'philotic',  git: 'https://github.com/nkeyes/philotic.git'
