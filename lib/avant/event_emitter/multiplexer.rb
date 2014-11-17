@@ -41,9 +41,7 @@ module Avant
             logger.error e.message
           end
         end
-        while true
-          sleep 1
-        end
+        Philotic::Subscriber.endure
 
       end
 
