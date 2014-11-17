@@ -4,4 +4,4 @@ source 'https://rubygems.org'
 gemspec
 
 
-gem 'philotic', '~> 0.1.0'
+gem 'philotic', '~> 0.1.1'
