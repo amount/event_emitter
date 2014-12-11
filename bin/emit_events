@@ -12,12 +12,7 @@ Avant::EventEmitter::Emitter.configure do |c|
   c.librato_api_key = ENV['AVANT_EVENT_EMITTER_LIBRATO_API_KEY']
   c.prefix          = ENV['AVANT_EVENT_EMITTER_PREFIX']
 
-  if ENV['RAILS_ENV'] == 'production' && ENV['AVANT_EVENT_EMITTER_ENABLED']
-    c.drivers = [:stathat]
-  else
-    c.drivers = :logger
-    # c.drivers = Logger.new("#{Rails.root}/log/events.log")
-  end
+  c.drivers = [:stathat]
 end
 
 Avant::EventEmitter::Multiplexer.subscribe
