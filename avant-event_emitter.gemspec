@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.1'
   spec.add_development_dependency 'rspec-its', '~> 1.1'
 
-  spec.add_dependency 'philotic', '>= 0.2.4'
+  spec.add_dependency 'philotic', '>= 0.3.0'
   spec.add_dependency 'stathat'
   spec.add_dependency 'librato-metrics'
 

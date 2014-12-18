@@ -24,7 +24,8 @@ module Avant
       end
 
       def subscribe
-        Philotic::Subscriber.subscribe(SUBSCRIPTION, ack: true) do |metadata, message|
+        philotic = Philotic.connection
+        philotic.subscriber.subscribe(SUBSCRIPTION, ack: true) do |metadata, message|
           begin
             stat = {
                 'stat'  => message[:attributes]['stat'],
@@ -34,17 +35,15 @@ module Avant
 
             emit!(stat)
 
-            Philotic::Subscriber.acknowledge(message)
+            philotic.subscriber.acknowledge(message)
 
           rescue => e
-            Philotic::Subscriber.reject(message)
+            philotic.subscriber.reject(message)
             logger.error e.message
           end
         end
-        Philotic::Subscriber.endure
-
+        philotic.subscriber.endure
       end
-
     end
   end
 end
