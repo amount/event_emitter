@@ -16,7 +16,7 @@ end
 rule /^bump:.*/ do |t|
   sh "git status | grep 'nothing to commit'" # ensure we are not dirty
   index = ['major', 'minor', 'patch'].index(t.name.split(':').last)
-  file  = 'lib/philotic/version.rb'
+  file  = 'lib/avant/event_emitter/version.rb'
 
   version_file                = File.read(file)
   old_version, *version_parts = version_file.match(/(\d+)\.(\d+)\.(\d+)/).to_a
