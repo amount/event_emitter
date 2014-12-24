@@ -27,7 +27,7 @@ module Avant
         end
 
         def drivers
-          @drivers ||= [:stathat]
+          @drivers ||= [parse_driver(:stathat)]
         end
 
         def drivers=(drivers)
