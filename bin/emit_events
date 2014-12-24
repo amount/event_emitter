@@ -14,5 +14,12 @@ Avant::EventEmitter::Emitter.configure do |c|
 
   c.drivers = [:stathat]
 end
+count = ENV['PROCESS_COUNT'].to_i
+count = 2 if count < 1
 
-Avant::EventEmitter::Multiplexer.subscribe
+
+count.times do
+  Avant::EventEmitter::Multiplexer.subscribe
+end
+
+philotic.subscriber.endure

@@ -42,7 +42,6 @@ module Avant
             logger.error e.message
           end
         end
-        philotic.subscriber.endure
       end
     end
   end
