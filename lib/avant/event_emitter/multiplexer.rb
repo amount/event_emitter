@@ -15,12 +15,8 @@ module Avant
         @logger ||= Logger.new(STDOUT)
       end
 
-      def emitter
-        Avant::EventEmitter::Emitter
-      end
-
       def emit!(*args)
-        emitter.emit! *args
+        Avant::EventEmitter::Emitter.emit! *args
       end
 
       def subscribe
