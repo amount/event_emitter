@@ -10,7 +10,7 @@ module Avant
       ::Pathname.new File.expand_path('../../../', __FILE__)
     end
     def self.philotic_queues
-      YAML.load_file(root.join('config', 'philotic_queues.yml'))
+      @queues ||= YAML.load_file(root.join('config', 'philotic_queues.yml'))
     end
   end
 end
