@@ -15,10 +15,6 @@ module Avant
         @logger ||= Logger.new(STDOUT)
       end
 
-      def emit!(*args)
-        Avant::EventEmitter::Emitter.emit! *args
-      end
-
       def subscribe
         philotic = Philotic.connection
         philotic.subscriber.subscribe(SUBSCRIPTION, ack: true) do |metadata, message|
@@ -29,12 +25,12 @@ module Avant
                 't'     => metadata.attributes[:timestamp],
             }
 
-            emit!(stat)
+            Avant::EventEmitter::Emitter.emit!(stat)
 
-            philotic.subscriber.acknowledge(message)
+            acknowledge(message)
 
           rescue => e
-            philotic.subscriber.reject(message)
+            reject(message)
             logger.error e.message
           end
         end
