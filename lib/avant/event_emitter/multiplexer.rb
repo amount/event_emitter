@@ -22,6 +22,7 @@ module Avant
             stat = {
                 'stat'  => message[:attributes]['stat'],
                 'count' => message[:attributes]['count'],
+                'value' => message[:attributes]['value'],
                 't'     => metadata.attributes[:timestamp],
             }
 
