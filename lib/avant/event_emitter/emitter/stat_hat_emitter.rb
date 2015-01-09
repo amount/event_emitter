@@ -67,7 +67,7 @@ module Avant
           stats.map! { |stat| sanitize_stat stat }
 
           response = StatHat::Json::Api.post_stats stats
-          raise RuntimeError.new "publishing error #{response.body}" unless response.valid?
+          raise RuntimeError.new "publishing error #{response.body}. stats: #{JSON.pretty_generate(stats)}" unless response.valid?
           logger.info "published #{stats.count} stats to StatHat"
         end
       end
