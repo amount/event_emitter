@@ -7,7 +7,6 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'config'))
 require 'rubygems'
 require 'bundler/setup'
 require 'rspec/its'
-require 'avant/event_emitter'
 
 Bundler.require(:default, :test)
 
