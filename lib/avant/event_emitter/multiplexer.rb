@@ -20,8 +20,8 @@ module Avant
             'stat' => message[:attributes]['stat'],
             't'    => metadata[:timestamp],
         }.tap do |stat|
-          stat[:value] = message[:attributes]['value'] if message[:attributes]['value']
-          stat[:count] = message[:attributes]['count'] if message[:attributes]['count']
+          stat[:value] = message[:attributes]['value'].to_f if message[:attributes]['value']
+          stat[:count] = message[:attributes]['count'].to_i if message[:attributes]['count']
         end
       end
 
