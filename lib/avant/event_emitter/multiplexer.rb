@@ -17,8 +17,8 @@ module Avant
 
       def build_stat(metadata, message)
         {
-            'stat'  => message[:attributes]['stat'],
-            't'     => metadata[:timestamp],
+            'stat' => message[:attributes]['stat'],
+            't'    => metadata[:timestamp],
         }.tap do |stat|
           stat[:value] = message[:attributes]['value'] if message[:attributes]['value']
           stat[:count] = message[:attributes]['count'] if message[:attributes]['count']
@@ -34,11 +34,11 @@ module Avant
       end
 
       def last_publish_attempted_at
-        @last_publish_attempted_at ||= Time.now.to_i
+        @last_publish_attempted_at ||= Time.now.to_f
       end
 
       def publish_wait_time
-        @publish_wait_time ||= ENV['EVENT_EMITTER_PUBLISH_WAIT_TIME'] || 10.seconds
+        @publish_wait_time ||= ENV['EVENT_EMITTER_PUBLISH_WAIT_TIME'] || 0.seconds
       end
 
       def subscribe
@@ -57,7 +57,6 @@ module Avant
         Thread.new do
           loop do
             drain_stat_queue
-            sleep 1
           end
         end.abort_on_exception = true
       end
@@ -66,37 +65,37 @@ module Avant
         queued_count = stat_queue.size
         if queued_count >= Philotic.config.prefetch_count || time_since_last_publish_attempt >= publish_wait_time
           emit_stats(queued_count)
+          Thread.pass
         end
       end
 
       def emit_stats(queued_count)
         stats = []
-        queued_count.times { stats << @stat_queue.pop }
+        messages = []
+        queued_count.times do
+          stats << @stat_queue.pop
+          messages << @message_queue.pop
+        end
 
         if stats.length > 0
           Avant::EventEmitter::Emitter.emitters.each do |emitter|
             emitter.emit_stats(stats)
           end
 
-          while !message_queue.empty?
-            message = message_queue.pop
-          end
-          Philotic.acknowledge(message, true) if message
+          Philotic.acknowledge(messages.last, true) if messages.count > 0
         end
 
-        @last_publish_attempted_at = Time.now.to_i
+        @last_publish_attempted_at = Time.now.to_f
 
       rescue => e
         logger.error e.message
-        queued_count.times { Philotic.reject message_queue.pop }
+        messages.each { |message| Philotic.reject message }
       ensure
-        stat_queue.clear
-        message_queue.clear
         @last_publish_attempted_at = nil
       end
 
       def time_since_last_publish_attempt
-        Time.now.to_i - last_publish_attempted_at
+        Time.now.to_f - last_publish_attempted_at
       end
     end
   end
