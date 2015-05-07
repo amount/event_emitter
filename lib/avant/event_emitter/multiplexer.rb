@@ -9,7 +9,8 @@ module Avant
       attr_accessor :logger
 
 
-      SUBSCRIPTION = 'event_emitter_events'
+      # SUBSCRIPTION = 'event_emitter_events'
+      SUBSCRIPTION = ENV['EVENT_EMITTER_QUEUE_NAME']
 
       def logger
         @logger ||= Logger.new(STDOUT)
@@ -18,11 +19,10 @@ module Avant
       def build_stat(metadata, message)
         {
             'stat' => message[:attributes]['stat'],
+            'count' => message[:attributes]['count'],
+            'value' => message[:attributes]['value'],
             't'    => metadata[:timestamp],
-        }.tap do |stat|
-          stat[:value] = message[:attributes]['value'].to_f if message[:attributes]['value']
-          stat[:count] = message[:attributes]['count'].to_i if message[:attributes]['count']
-        end
+        }
       end
 
       def stat_queue
@@ -83,12 +83,13 @@ module Avant
           end
 
           Philotic.acknowledge(messages.last, true) if messages.count > 0
+          logger.info "Acked #{messages.count} messages."
         end
 
         @last_publish_attempted_at = Time.now.to_f
 
       rescue => e
-        logger.error e.message
+        logger.error "#{e.message}."
         messages.each { |message| Philotic.reject message }
       ensure
         @last_publish_attempted_at = nil
