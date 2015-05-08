@@ -13,11 +13,18 @@ module Avant
 
         extend self
 
+        def prefix_stat(stat)
+          super(stat)
+          stat[:stat] = "events.#{stat[:stat]}"
+        end
+
         def emit_stats(stats, sanitize=true)
           stats = stats.map { |stat| sanitize_stat stat } if sanitize
 
           stats.each do |stat|
-            HostedGraphite.send_metric(stat[:stat], stat[:count] || stat[:value])
+            metric = stat[:count] || stat[:value]
+            HostedGraphite.send_metric(stat[:stat], metric)
+
           end
           logger.info "published #{stats.count} stats to Hosted Graphite"
         end

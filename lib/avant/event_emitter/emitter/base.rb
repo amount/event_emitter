@@ -58,7 +58,7 @@ module Avant
         end
 
         def sanitize_stat_values(stat)
-          if (stat.has_key? :count)
+          if stat.has_key?(:count) && stat[:count] && stat[:count].to_s.strip != ''
             stat[:count] = stat[:count].to_i rescue 1
             stat.delete :value
           elsif (stat.has_key? :value)
