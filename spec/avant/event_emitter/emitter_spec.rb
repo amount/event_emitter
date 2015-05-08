@@ -8,7 +8,7 @@ module Avant
 
       describe '.emitters' do
         it 'should find all emitters' do
-          expect(subject.emitters).to eq [Avant::EventEmitter::Emitter::StatHatEmitter]
+          expect(subject.emitters).to include(Avant::EventEmitter::Emitter::StatHatEmitter, Avant::EventEmitter::Emitter::HostedGraphiteEmitter)
         end
       end
 
