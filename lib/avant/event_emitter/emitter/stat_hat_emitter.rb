@@ -27,6 +27,7 @@ module Avant
         def sanitize_stat(stat)
           stat.symbolize_keys!
           sanitize_stat_name(stat)
+          sanitize_stat_values(stat)
           prefix_stat(stat)
           set_iso8601_t(stat)
 
@@ -55,6 +56,18 @@ module Avant
           stat[:stat]   = sanitize stat[:stat]
         end
 
+        def sanitize_stat_values(stat)
+          if (stat.has_key? :count)
+            stat[:count] = stat[:count].to_i rescue 1
+            stat.delete :value
+          elsif (stat.has_key? :value)
+            stat[:value] = stat[:value].to_f rescue 1
+
+          end
+          stat[:prefix] = sanitize stat[:prefix]
+          stat[:stat]   = sanitize stat[:stat]
+        end
+
         def prefix_stat(stat)
           stat[:stat] = if pfix = stat.delete(:prefix) || prefix
                           [pfix, stat[:stat]] * '.'
@@ -63,11 +76,24 @@ module Avant
                         end
         end
 
-        def emit_stats(stats)
-          stats.map! { |stat| sanitize_stat stat }
+        def emit_stats(stats, sanitize=true)
+          stats.map! { |stat| sanitize_stat stat } if sanitize
 
           response = StatHat::Json::Api.post_stats stats
-          raise RuntimeError.new "publishing error #{response.body}. stats: #{JSON.pretty_generate(stats)}" unless response.valid?
+
+          unless response.valid?
+            if response.message == 'json too long'
+              batch_size = stats.count/2
+              logger.info "#{response.message} splitting into batches of #{batch_size}"
+              stats.each_slice(batch_size).each do |stats_chunk|
+                emit_stats stats_chunk, false
+              end
+              logger.info "published #{stats.count} in batches of #{batch_size}"
+
+              return
+            end
+            raise RuntimeError.new "publishing error #{response.body}. stats: #{stats.count}"
+          end
           logger.info "published #{stats.count} stats to StatHat"
         end
       end
