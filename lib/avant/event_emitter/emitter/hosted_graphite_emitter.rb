@@ -1,4 +1,5 @@
 require 'hosted_graphite'
+require 'hosted_graphite/statsd'
 require 'awesome_print'
 require 'avant/event_emitter/emitter/base'
 
