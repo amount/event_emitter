@@ -22,9 +22,12 @@ module Avant
           stats = stats.map { |stat| sanitize_stat stat } if sanitize
 
           stats.each do |stat|
-            metric = stat[:count] || stat[:value]
-            HostedGraphite.send_metric(stat[:stat], metric)
 
+            if stat[:count]
+              HostedGraphite.count(stat[:stat], stat[:count])
+            else
+              HostedGraphite.send_metric(stat[:stat], stat[:value])
+            end
           end
           logger.info "published #{stats.count} stats to Hosted Graphite"
         end
