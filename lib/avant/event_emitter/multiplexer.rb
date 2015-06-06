@@ -1,5 +1,5 @@
 require 'avant/event_emitter/emitter'
-require 'philotic/consumer'
+require 'philotic'
 require 'logger'
 
 module Avant
@@ -9,16 +9,18 @@ module Avant
 
       subscribe_to ENV['EVENT_EMITTER_QUEUE_NAME']
 
+      manually_acknowledge
+
       def logger
         @logger ||= Logger.new(STDOUT)
       end
 
       def build_stat(message)
         {
-            'stat' => message.stat,
-            'count' => message.count,
-            'value' => message.value,
-            't'    => message.timestamp,
+          'stat'  => message.stat,
+          'count' => message.count,
+          'value' => message.value,
+          't'     => message.timestamp,
         }
       end
 
@@ -46,26 +48,29 @@ module Avant
       def subscribe
         super
         start_drain_queue_thread
+        endure
       end
 
       def start_drain_queue_thread
-        Thread.new do
+        t = Thread.new do
           loop do
             drain_stat_queue
           end
-        end.abort_on_exception = true
+        end
+
+        t.abort_on_exception = true
       end
 
       def drain_stat_queue
         queued_count = stat_queue.size
-        if queued_count >= Philotic.config.prefetch_count || time_since_last_publish_attempt >= publish_wait_time
+        if queued_count >= config.prefetch_count || time_since_last_publish_attempt >= publish_wait_time
           emit_stats(queued_count)
           Thread.pass
         end
       end
 
       def emit_stats(queued_count)
-        stats = []
+        stats    = []
         messages = []
         queued_count.times do
           stats << @stat_queue.pop
