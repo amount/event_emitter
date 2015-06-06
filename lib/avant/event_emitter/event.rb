@@ -1,13 +1,13 @@
-require 'philotic/event'
+require 'philotic/message'
 require 'active_support/core_ext/hash'
 
 module Avant
   module EventEmitter
-    class Event < Philotic::Event
+    class Event < Philotic::Message
 
       PRODUCT    = :avant
       COMPONENT  = :event_emitter
-      EVENT_TYPE = :'event_emitter.event'
+      MESSAGE_TYPE = :'event_emitter.event'
 
       attr_routable :stat
       attr_payload :count
@@ -19,7 +19,7 @@ module Avant
 
         @philotic_product    = PRODUCT
         @philotic_component  = COMPONENT
-        @philotic_event_type = EVENT_TYPE
+        @philotic_message_type = MESSAGE_TYPE
 
         self.stat  = attributes[:stat]
         self.count = attributes[:count]
@@ -32,7 +32,7 @@ module Avant
       def philotic_component=(val)
       end
 
-      def philotic_event_type=(val)
+      def philotic_message_type=(val)
       end
 
     end

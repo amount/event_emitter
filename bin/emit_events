@@ -7,3 +7,4 @@ require 'avant/event_emitter/emitter'
 require 'avant/event_emitter/multiplexer'
 
 Avant::EventEmitter::Multiplexer.subscribe
+Philotic.endure

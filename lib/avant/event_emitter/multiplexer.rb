@@ -1,27 +1,24 @@
 require 'avant/event_emitter/emitter'
-require 'philotic/singleton'
+require 'philotic/consumer'
 require 'logger'
 
 module Avant
   module EventEmitter
-    module Multiplexer
-      extend self
+    class Multiplexer < Philotic::Consumer
       attr_accessor :logger
 
-
-      # SUBSCRIPTION = 'event_emitter_events'
-      SUBSCRIPTION = ENV['EVENT_EMITTER_QUEUE_NAME']
+      subscribe_to ENV['EVENT_EMITTER_QUEUE_NAME']
 
       def logger
         @logger ||= Logger.new(STDOUT)
       end
 
-      def build_stat(metadata, message)
+      def build_stat(message)
         {
-            'stat' => message[:attributes]['stat'],
-            'count' => message[:attributes]['count'],
-            'value' => message[:attributes]['value'],
-            't'    => metadata[:timestamp],
+            'stat' => message.stat,
+            'count' => message.count,
+            'value' => message.value,
+            't'    => message.timestamp,
         }
       end
 
@@ -41,16 +38,14 @@ module Avant
         @publish_wait_time ||= ENV['EVENT_EMITTER_PUBLISH_WAIT_TIME'] || 0.seconds
       end
 
+      def consume(message)
+        message_queue << message
+        stat_queue << build_stat(message)
+      end
+
       def subscribe
-
-        Philotic.subscribe(SUBSCRIPTION, ack: true) do |message, metadata, queue|
-
-          Avant::EventEmitter::Multiplexer.message_queue << message
-          Avant::EventEmitter::Multiplexer.stat_queue << Avant::EventEmitter::Multiplexer.build_stat(metadata, message)
-
-        end
-        Avant::EventEmitter::Multiplexer.start_drain_queue_thread
-        Philotic.endure
+        super
+        start_drain_queue_thread
       end
 
       def start_drain_queue_thread
@@ -82,7 +77,7 @@ module Avant
             emitter.emit_stats(stats)
           end
 
-          Philotic.acknowledge(messages.last, true) if messages.count > 0
+          acknowledge(messages.last, true) if messages.count > 0
           logger.info "Acked #{messages.count} messages."
         end
 
@@ -90,7 +85,7 @@ module Avant
 
       rescue => e
         logger.error "#{e.message}."
-        messages.each { |message| Philotic.reject message }
+        messages.each { |message| reject message }
       ensure
         @last_publish_attempted_at = nil
       end
