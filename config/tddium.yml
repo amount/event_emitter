@@ -1,3 +1,5 @@
 :tddium:
   :ruby_version: ruby-2.1.5
   :bundler_version: 1.8.4
+  :rabbitmq:
+    :version: '3.4.1'
