@@ -20,7 +20,7 @@ module Avant
 
           unless response.valid?
             if response.message == 'json too long'
-              batch_size = stats.count/2
+              batch_size = stats.count/4
               logger.info "#{response.message} splitting into batches of #{batch_size}"
               stats.each_slice(batch_size).each do |stats_chunk|
                 emit_stats stats_chunk, false
