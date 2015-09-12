@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
   spec.test_files            = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths         = ['lib']
 
+  spec.add_development_dependency 'awesome_print', '~> 1.6'
   spec.add_development_dependency 'bundler', '~> 1.6'
   spec.add_development_dependency 'rake', '~> 10.3'
   spec.add_development_dependency 'rspec', '~> 3.1'
@@ -25,7 +26,7 @@ Gem::Specification.new do |spec|
 
 
   spec.add_dependency 'activesupport'
-  spec.add_dependency 'philotic', '~> 1.0.2'
+  spec.add_dependency 'philotic', '~> 1.1'
   spec.add_dependency 'hosted_graphite'
   spec.add_dependency 'stathat-json'
   spec.add_dependency 'statsd-ruby'

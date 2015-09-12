@@ -1,5 +1,4 @@
 require 'stathat/json'
-require 'awesome_print'
 require 'active_support/all'
 
 module Avant
