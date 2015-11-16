@@ -89,7 +89,8 @@ module Avant
         @last_publish_attempted_at = Time.now.to_f
 
       rescue => e
-        logger.error "#{e.message}."
+        raise e
+        logger.error "#{e.message} - #{e.backtrace}"
         messages.each { |message| reject message }
       ensure
         @last_publish_attempted_at = nil
