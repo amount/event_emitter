@@ -1,5 +1,6 @@
 require 'hosted_graphite'
-require 'hosted_graphite/statsd'
+# See https://github.com/seuros/hosted_graphite/issues/13
+require 'hosted_graphite/statsd' if HostedGraphite::VERSION < '0.1.1'
 require 'avant/event_emitter/emitter/base'
 
 module Avant
