@@ -21,7 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 10.3'
   spec.add_development_dependency 'rspec', '~> 3.1'
   spec.add_development_dependency 'rspec-its', '~> 1.1'
-  spec.add_development_dependency  'tddium', '~> 1.23.0'
   spec.add_development_dependency  'codeclimate-test-reporter', '~> 0.4'
 
 
