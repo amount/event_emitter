@@ -8,6 +8,9 @@ require 'rubygems'
 require 'bundler/setup'
 require 'rspec/its'
 
+require 'hosted_graphite'
+HostedGraphite.api_key = 'YOUR API KEY'
+
 Bundler.require(:default, :test)
 
 RSpec.configure do |config|
