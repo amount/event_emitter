@@ -6,9 +6,9 @@ require 'avant/event_emitter/version'
 Gem::Specification.new do |spec|
   spec.name                  = 'avant-event_emitter'
   spec.version               = Avant::EventEmitter::VERSION
-  spec.authors               = ['Nathan Keyes']
-  spec.email                 = ['nathan.keyes@avantcredit.com']
-  spec.summary               = %q{Avatn Event Emitter}
+  spec.authors               = ['Vincent Storme']
+  spec.email                 = ['vincent.storme@avantcredit.com']
+  spec.summary               = %q{Avant Event Emitter}
   spec.description           = %q{publish events to 3rd party services}
   spec.homepage              = ''
   spec.files                 = `git ls-files -z`.split("\x0")
@@ -23,11 +23,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec-its', '~> 1.1'
   spec.add_development_dependency  'codeclimate-test-reporter', '~> 0.4'
 
-
   spec.add_dependency 'activesupport'
   spec.add_dependency 'philotic', '~> 1.3'
   spec.add_dependency 'hosted_graphite'
   spec.add_dependency 'stathat-json', '~> 0.1'
   spec.add_dependency 'statsd-ruby'
-
 end
