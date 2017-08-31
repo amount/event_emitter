@@ -26,5 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activesupport'
   spec.add_dependency 'philotic', '~> 1.3'
   spec.add_dependency 'hosted_graphite'
+  spec.add_dependency 'stathat-json', '~> 0.1'
   spec.add_dependency 'statsd-ruby'
 end
